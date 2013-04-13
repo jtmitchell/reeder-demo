@@ -1,9 +1,9 @@
+{% load static from staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     {% block starthead %}{% endblock starthead %}
-    <meta charset="{{ resource.meta.charset }}">
-    <title>{% block title %}{{ resource.meta.title }}{% endblock %} | {{ site_title }}</title>
+    <title>{% block title %}{{ resource.meta.title }}{% endblock %} | Reeder</title>
     <meta name="description" content="{{ resource.meta.description }}">
     <meta name="author" content="{{ resource.meta.author }}">
     <meta name="verify-v1" content="{{ resource.meta.google_verify }}">
@@ -14,8 +14,8 @@
     <![endif]-->
 
     {% block basecss %}
-    <link href="{{ media_url('css/bootstrap.css') }}" rel="stylesheet">
-    <link href="{{ media_url('css/style.css') }}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
     {% endblock basecss %}
     {% block css %}{% endblock %}
 
@@ -27,11 +27,11 @@
 
     {% block endhead %}{% endblock endhead %}
     {% block analytics %}
-    {% include "analytics.j2" %}
+    {% include "analytics.html" %}
     {% endblock analytics %}
   </head>
 
-  <body class="{{ resource.meta.id if resource.meta.id else resource.slug }}">
+  <body class="{% if resource.meta.id %}{{ resource.meta.id  }}{% else %}{{ resource.slug }}{% endif %}">
 
     {% block body %}
 
@@ -46,7 +46,6 @@
 
       <footer>
         {% block footer %}
-        <p>Created by <a href="{{ author.url }}">{{ author.name }}</a></p>
         {% endblock footer %}
       </footer>
 
@@ -60,26 +59,26 @@
     {% block jquery %}
     {# Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary #}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
-    <script>window.jQuery || document.write('<script src="{{ media_url('js/libs/jquery-1.5.1.min.js.js') }}">\x3C/script>')</script>
+    <script>window.jQuery || document.write('<script src="{% static 'js/libs/jquery-1.5.1.min.js.js' %}">\x3C/script>')</script>
     {% endblock jquery %}
 
     {% block bootstrap_scripts %}
     {# Uncomment any of these lines to enable that plugin on your site #}
-{#    <script src="{{ media_url('js/libs/bootstrap-alerts.js') }}"></script>#}
-{#    <script src="{{ media_url('js/libs/bootstrap-buttons.js') }}"></script>#}
-{#    <script src="{{ media_url('js/libs/bootstrap-dropdown.js') }}"></script>#}
-{#    <script src="{{ media_url('js/libs/bootstrap-modal.js') }}"></script>#}
-{#    <script src="{{ media_url('js/libs/bootstrap-popover.js') }}"></script>#}
-{#    <script src="{{ media_url('js/libs/bootstrap-scrollspy.js') }}"></script>#}
-{#    <script src="{{ media_url('js/libs/bootstrap-tabs.js') }}"></script>#}
-{#    <script src="{{ media_url('js/libs/bootstrap-twipsy.js') }}"></script>#}
+{#    <script src="{% static 'js/libs/bootstrap-alerts.js' %}"></script>#}
+{#    <script src="{% static 'js/libs/bootstrap-buttons.js' %}"></script>#}
+{#    <script src="{% static 'js/libs/bootstrap-dropdown.js' %}"></script>#}
+{#    <script src="{% static 'js/libs/bootstrap-modal.js' %}"></script>#}
+{#    <script src="{% static 'js/libs/bootstrap-popover.js' %}"></script>#}
+{#    <script src="{% static 'js/libs/bootstrap-scrollspy.js' %}"></script>#}
+{#    <script src="{% static 'js/libs/bootstrap-tabs.js' %}"></script>#}
+{#    <script src="{% static 'js/libs/bootstrap-twipsy.js' %}"></script>#}
     {% endblock bootstrap_scripts %}
 
     {% block scripts %}
     {% endblock scripts %}
 
     <!--[if lt IE 7 ]>
-      <script src="{{ media_url('js/libs/dd_belatedpng.js') }}"></script>
+      <script src="{% static 'js/libs/dd_belatedpng.js' %}"></script>
       <script>DD_belatedPNG.fix('img, .png_bg'); // Fix any <img> or .png_bg bg-images. Also, please read goo.gl/mZiyb </script>
     <![endif]-->
 

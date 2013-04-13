@@ -6,7 +6,7 @@
 <ul>
 {% for feed in feeds %}
 	<li>
-		<a href="{% url feed_get feed.pk %}">{{ feed }}</a>
+		<a href="{% url feed_get feed.pk %}">{{ feed.name }}</a>
 	</li>
 {% endfor %}
 </ul>

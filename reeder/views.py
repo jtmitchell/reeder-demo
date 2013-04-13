@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
+from django.http import HttpResponse
 import json
 
 from models import RssFeed, RssArticle
@@ -8,9 +9,12 @@ import logging
 log = logging.getLogger(__name__)
 
 def home(request):
-    context = {}
-    conext['feeds'] = RssFeed.objects.all()
-    return (request,'reeder/home.html',context)
+    context = {'resource': {
+            'meta': {'title': 'Feed List',}
+            } 
+        }
+    context['feeds'] = RssFeed.objects.all()
+    return render(request,'reeder/home.html',context)
 
 def put(request, feed_id, article_url):
     status = {'success': True, 'feed': '', 'article': ''}
@@ -25,7 +29,7 @@ def put(request, feed_id, article_url):
         status['success'] = False
         status['error'] = e
         
-    return json.dumps(status)
+    return HttpResponse(json.dumps(status), mimetype='application/json')
     
 def get(request, feed_id):
     return_value = []
@@ -35,11 +39,11 @@ def get(request, feed_id):
         for article in RssArticle.objects.filter(feed=feed):
             return_value.append(article)
             
-    return json.dumps(return_value)
+    return HttpResponse(json.dumps(return_value), mimetype='application/json')
 
 def delete(request, feed_id):
     status = {'success': False}
     if RssFeed.objects.get(pk=feed_id).delete():
         status['success'] = True
-    return json.dumps(status)
+    return HttpResponse(json.dumps(status), mimetype='application/json')
 
