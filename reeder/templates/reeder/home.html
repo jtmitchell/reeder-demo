@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{%  block content %}
+<h1>Feeds</h1>
+<ul>
+{% for feed in feeds %}
+	<li>
+		<a href="{% url feed_get feed.pk %}">{{ feed }}</a>
+	</li>
+{% endfor %}
+</ul>
+{% endblock %}

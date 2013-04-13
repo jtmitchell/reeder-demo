@@ -8,10 +8,9 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'reeder.views.home', name='home'),
-    url(r'^create/$', 'reeder.views.create', name='create'),
-    url(r'^read/(?P<site_id>)/$', 'reeder.views.read', name='read'),
-    url(r'^update/(?P<site_id>)/$', 'reeder.views.update', name='update'),
-    url(r'^delete/(?P<site_id>)/$', 'reeder.views.delete', name='delete'),
+    url(r'^put/(?P<feed_id>\d+)/(?P<article_url>.+)/$', 'reeder.views.put', name='feed_put'),
+    url(r'^get/(?P<feed_id>\d+)/$', 'reeder.views.get', name='feed_get'),
+    url(r'^delete/(?P<feed_id\d+>)/$', 'reeder.views.delete', name='feed_delete'),
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
