@@ -37,7 +37,13 @@ def get(request, feed_id):
     feed = RssFeed.objects.get(pk=feed_id)
     if feed:
         for article in RssArticle.objects.filter(feed=feed):
-            return_value.append(article)
+            return_value.append({
+                'article_id': article.pk,
+                'url': article.url,
+                'is_read': article.is_read,
+                'snippet': article.snippet,
+                'lastmodified': str(article.lastmodified),
+                })
             
     return HttpResponse(json.dumps(return_value), mimetype='application/json')
 

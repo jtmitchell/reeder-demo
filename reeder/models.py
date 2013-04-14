@@ -8,15 +8,17 @@ class RssFeed(models.Model):
     lastmodified = models.DateTimeField(editable=False, auto_now=True, auto_now_add=True, db_index=True)
     
     def __unicode__(self):
-        if self.url:
-            return "{} {}".format(self.name, self.url)
+        if self.name:
+            return "{}".format(self.name)
+        elif self.url:
+            return "RssFeed {}".format(self.url)
         else:
             return "RssFeed {}".format(self.pk)
     
 class RssArticle(models.Model):
     feed = models.ForeignKey(RssFeed)
-    url = models.URLField(max_length=200,db_index=True,verify_exists=False,default='')
-    snippet = models.CharField(max_length=500,default='')
+    url = models.URLField(max_length=200, db_index=True, verify_exists=False, default='')
+    snippet = models.CharField(max_length=500, default='', blank=True)
     is_read = models.BooleanField(default=True)
     lastmodified = models.DateTimeField(editable=False, auto_now=True, auto_now_add=True, db_index=True)
     
