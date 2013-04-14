@@ -5,6 +5,7 @@ import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+TEST_RUNNER='reeder.nose_runner.run_tests'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
