@@ -8,7 +8,10 @@ class RssFeed(models.Model):
     lastmodified = models.DateTimeField(editable=False, auto_now=True, auto_now_add=True, db_index=True)
     
     def __unicode__(self):
-        return "{} {}".format(self.name, self.url)
+        if self.url:
+            return "{} {}".format(self.name, self.url)
+        else:
+            return "RssFeed {}".format(self.pk)
     
 class RssArticle(models.Model):
     feed = models.ForeignKey(RssFeed)
@@ -18,7 +21,10 @@ class RssArticle(models.Model):
     lastmodified = models.DateTimeField(editable=False, auto_now=True, auto_now_add=True, db_index=True)
     
     def __unicode__(self):
-        return "{} {} {}".format(self.feed, self.url, self.snippet[:10])
+        if self.url:
+            return "{} {} {}".format(self.feed, self.url, self.snippet[:10])
+        else:
+            return "RssArticle {}".format(self.pk)
     
     class Meta:
         unique_together = ['feed', 'url']
