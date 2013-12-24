@@ -3,9 +3,29 @@
 
 import os
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-TEST_RUNNER='reeder.nose_runner.run_tests'
+from django.core.exceptions import ImproperlyConfigured
+from os.path import join, abspath, dirname
+
+
+def get_env_variable(var_name):
+    """ Get the environment variable or return exception """
+
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = "Set the %s environment variable" % var_name
+        raise ImproperlyConfigured(error_msg)
+
+
+# support for filepath references
+here = lambda *x: join(abspath(dirname(__file__)), *x)
+PROJECT_ROOT = here("..", "..")
+root = lambda *x: join(abspath(PROJECT_ROOT), *x)
+
+
+DEBUG = False
+TEMPLATE_DEBUG = False
+TEST_RUNNER = 'reeder.nose_runner.run_tests'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -15,17 +35,18 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'reeder.db',                    # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'reeder',
+        'USER': get_env_variable('REEDER_DB_USER'),
+        'PASSWORD': get_env_variable('REEDER_DB_PASSWORD'),
+        'HOST': '',
+        'PORT': '',
     }
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/{{ docs_version }}/ref/settings/#allowed-hosts
+# See https://docs.djangoproject.com/en/{{ docs_version
+# }}/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
 
 # Local time zone for this installation. Choices can be found here:
@@ -87,7 +108,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -97,7 +118,7 @@ SECRET_KEY = '0hfur%+hyjrgr5d4_i09so)xwk78x!p&8@r4*s2x(mq5$btw1h'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -153,7 +174,3 @@ LOGGING = {
         },
     }
 }
-
-# check for a local settings override file
-if os.path.isfile(os.path.join(os.path.dirname(__file__), 'local_settings.py')):
-    from local_settings import *
