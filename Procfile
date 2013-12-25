@@ -1,1 +1,1 @@
-web: gunicorn reeder.wsgi
+web: gunicorn --pythonpath reeder reeder.wsgi
