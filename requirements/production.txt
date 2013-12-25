@@ -1,4 +1,1 @@
 -r base.txt
-
-# Heroku
-dj-database-url==0.2.1
