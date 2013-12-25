@@ -25,7 +25,7 @@ root = lambda *x: join(abspath(PROJECT_ROOT), *x)
 
 DEBUG = False
 TEMPLATE_DEBUG = False
-TEST_RUNNER = 'reeder.nose_runner.run_tests'
+TEST_RUNNER = 'nose_runner.run_tests'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -149,7 +149,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'reeder.reeder',
+    'rssfeeds',
     'south'
 )
 

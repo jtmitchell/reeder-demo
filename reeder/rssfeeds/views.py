@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import json
 
-from models import RssFeed, RssArticle
+from .models import RssFeed, RssArticle
 
 import logging
 log = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ def home(request):
             } 
         }
     context['feeds'] = RssFeed.objects.all()
-    return render(request,'reeder/home.html',context)
+    return render(request,'rssfeeds/home.html',context)
 
 def put(request, feed_id, article_url):
     status = {'success': True, 'feed': '', 'article': ''}
