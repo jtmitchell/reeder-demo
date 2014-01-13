@@ -3,4 +3,4 @@
 *.nja
 .project
 .pydevproject
-
+.settings/
