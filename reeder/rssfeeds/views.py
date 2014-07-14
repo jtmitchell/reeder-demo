@@ -8,13 +8,15 @@ from .models import RssFeed, RssArticle
 import logging
 log = logging.getLogger(__name__)
 
+
 def home(request):
     context = {'resource': {
-            'meta': {'title': 'Feed List',}
-            } 
+        'meta': {'title': 'Feed List', }
         }
+    }
     context['feeds'] = RssFeed.objects.all()
-    return render(request,'rssfeeds/home.html',context)
+    return render(request, 'rssfeeds/home.html', context)
+
 
 def put(request, feed_id, article_url):
     status = {'success': True, 'feed': '', 'article': ''}
@@ -22,15 +24,20 @@ def put(request, feed_id, article_url):
     try:
         feed, new_feed = RssFeed.objects.get_or_create(pk=feed_id)
         status['feed'] = 'created' if new_feed else 'updated'
-    
+
         article, new_article = RssArticle.objects.get_or_create(url=article_url, feed=feed)
-        status['article'] = 'created' if new_article else 'updated'
+        if new_article:
+            article.save()
+            status['article'] = 'created'
+        else:
+            status['article'] = 'updated'
     except Exception, e:
         status['success'] = False
         status['error'] = e
-        
+
     return HttpResponse(json.dumps(status), mimetype='application/json')
-    
+
+
 def get(request, feed_id):
     return_value = []
 
@@ -44,12 +51,12 @@ def get(request, feed_id):
                 'snippet': article.snippet,
                 'lastmodified': str(article.lastmodified),
                 })
-            
+
     return HttpResponse(json.dumps(return_value), mimetype='application/json')
+
 
 def delete(request, feed_id):
     status = {'success': False}
     if RssFeed.objects.get(pk=feed_id).delete():
         status['success'] = True
     return HttpResponse(json.dumps(status), mimetype='application/json')
-
