@@ -4,6 +4,6 @@ define({
   "description": "A simple demonstration of using REST API to save RSS articles",
   "generator": {
     "version": "0.5.2",
-    "time": "2014-07-14T12:08:12.434Z"
+    "time": "2014-07-14T12:26:47.190Z"
   }
 });
