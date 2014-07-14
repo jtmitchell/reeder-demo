@@ -19,6 +19,18 @@
         ]
       }
     },
+    "success": {
+      "fields": {
+        "Success 204": [
+          {
+            "group": "Success 204",
+            "field": "empty",
+            "optional": false,
+            "description": "No data returned"
+          }
+        ]
+      }
+    },
     "filename": "./reeder/rssfeeds/api.py"
   },
   {
@@ -347,7 +359,7 @@
   {
     "type": "delete",
     "url": "/api/feeds/:id",
-    "title": "Feed detail",
+    "title": "Delete an existing Feed",
     "version": "0.0.2",
     "name": "DeleteFeed",
     "group": "Feeds",
@@ -360,6 +372,18 @@
             "field": "id",
             "optional": false,
             "description": "ID for the feed"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 204": [
+          {
+            "group": "Success 204",
+            "field": "empty",
+            "optional": false,
+            "description": "No data returned"
           }
         ]
       }

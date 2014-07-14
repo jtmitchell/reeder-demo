@@ -92,12 +92,14 @@ class RssFeedResource(DjangoResource):
         return feed
 
     """
-    @api {delete} /api/feeds/:id Feed detail
+    @api {delete} /api/feeds/:id Delete an existing Feed
     @apiVersion 0.0.2
     @apiName DeleteFeed
     @apiGroup Feeds
 
     @apiParam {Number} id ID for the feed
+
+    @apiSuccess (Success 204) empty No data returned
     """
     def delete(self, pk):
         RssFeed.objects.get(id=pk).delete()
@@ -212,6 +214,8 @@ class RssArticleResource(DjangoResource):
     @apiGroup Articles
 
     @apiParam {Number} id ID for the article
+
+    @apiSuccess (Success 204) empty No data returned
     """
     def delete(self, pk):
         RssArticle.objects.get(id=pk).delete()
