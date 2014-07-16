@@ -3,10 +3,8 @@ reeder-demo
 
 Simple django site for a Juju demo
 
-## 16 July 2014
-
-This code has been adapted into a 12 Factor App style,
-and had a RESTish API added using *Restless*
+*16 July 2014: This code has been adapted into a 12 Factor App style,
+and had a RESTish API added using Restless*
 
 ## Installation
 
