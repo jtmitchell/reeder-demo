@@ -210,16 +210,16 @@ sdist = { url = "https://files.pythonhosted.org/packages/2b/8f/77a4b8ec50c821193
 
 [[package]]
 name = "django"
-version = "5.1"
+version = "4.2.15"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asgiref" },
     { name = "sqlparse" },
     { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1e/0c/d854d25bb74a8a3b41e642bbd27fe6af12fadd0edfd07d487809cf0ef719/Django-5.1.tar.gz", hash = "sha256:848a5980e8efb76eea70872fb0e4bc5e371619c70fffbe48e3e1b50b2c09455d", size = 10681050 }
+sdist = { url = "https://files.pythonhosted.org/packages/01/1e/d6306fb0a4f44ed9d12430953786747d609c85258c74c545fdc2b37f5a83/Django-4.2.15.tar.gz", hash = "sha256:c77f926b81129493961e19c0e02188f8d07c112a1162df69bfab178ae447f94a", size = 10418066 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/28/b4/110532cebfea2244d76119904da98c6fa045ebb202aee9ec7cbf36ea3cad/Django-5.1-py3-none-any.whl", hash = "sha256:d3b811bf5371a26def053d7ee42a9df1267ef7622323fe70a601936725aa4557", size = 8246099 },
+    { url = "https://files.pythonhosted.org/packages/0e/77/86af525feb6a9951d2bc96371ae3652f11bb35933b21966abc594f777956/Django-4.2.15-py3-none-any.whl", hash = "sha256:61ee4a130efb8c451ef3467c67ca99fdce400fedd768634efc86a68c18d80d30", size = 7992797 },
 ]
 
 [[package]]
@@ -286,6 +286,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/6d/88/77b5ede11147941dece064bd80ac618f6a4b91b4c9d5d305a2660014941e/django-storages-1.14.4.tar.gz", hash = "sha256:69aca94d26e6714d14ad63f33d13619e697508ee33ede184e462ed766dc2a73f", size = 83496 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e0/69/a4b2f2dfa51fd18fd898e10cc41d73a30965da7cb3b683f1375b1dc3dd5c/django_storages-1.14.4-py3-none-any.whl", hash = "sha256:d61930acb4a25e3aebebc6addaf946a3b1df31c803a6bf1af2f31c9047febaa3", size = 31809 },
+]
+
+[[package]]
+name = "django-upgrade"
+version = "1.20.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "tokenize-rt" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7d/2e/ea8df2badfd012ce8deda004f0449bad7488921b77d7f5e27517788f4446/django_upgrade-1.20.0.tar.gz", hash = "sha256:47aa2133972b600a8d935bab8d58d69b2e426bfc985d4c4f4c2fefecd754dd88", size = 65530 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/33/89/67f76a37aa2df1fdd9046030d57b9e32a54db1a64d2c7d313eac94b581b5/django_upgrade-1.20.0-py3-none-any.whl", hash = "sha256:938afa1a531399a12904eb71ffacad0c997ddbe0c45ec38bc0883a1cdcfd99ef", size = 66573 },
 ]
 
 [[package]]
@@ -631,6 +643,7 @@ dev = [
     { name = "bandit" },
     { name = "bump2version" },
     { name = "django-debug-toolbar" },
+    { name = "django-upgrade" },
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-django" },
@@ -642,8 +655,8 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "dj-database-url", specifier = ">=2.2.0" },
-    { name = "dj-static" },
-    { name = "django", specifier = ">=5.1" },
+    { name = "dj-static", specifier = ">=0.0.6" },
+    { name = "django", specifier = "~=4.2" },
     { name = "django-allauth", extras = ["mfa"], specifier = ">=64.1.0" },
     { name = "django-htmx", specifier = ">=1.19.0" },
     { name = "django-redis", specifier = ">=5.4.0" },
@@ -659,6 +672,7 @@ dev = [
     { name = "bandit", specifier = ">=1.7.9" },
     { name = "bump2version", specifier = ">=1.0.1" },
     { name = "django-debug-toolbar", specifier = ">=4.4.6" },
+    { name = "django-upgrade", specifier = ">=1.20.0" },
     { name = "pre-commit", specifier = ">=3.8.0" },
     { name = "pytest", specifier = ">=8.3.2" },
     { name = "pytest-django", specifier = ">=4.8.0" },

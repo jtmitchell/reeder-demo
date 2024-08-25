@@ -23,7 +23,6 @@ root = lambda *x: join(abspath(PROJECT_ROOT), *x)
 
 DEBUG = False
 TEMPLATE_DEBUG = False
-TEST_RUNNER = "nose_runner.run_tests"
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -33,7 +32,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": "reeder",
         "USER": get_env_variable("REEDER_DB_USER"),
         "PASSWORD": get_env_variable("REEDER_DB_PASSWORD"),
@@ -65,10 +64,6 @@ SITE_ID = 1
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
-
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale
-USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -149,7 +144,6 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     "rssfeeds",
-    "south",
 )
 
 # A sample logging configuration. The only tangible logging

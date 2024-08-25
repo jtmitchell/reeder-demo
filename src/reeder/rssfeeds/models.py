@@ -18,7 +18,7 @@ class RssFeed(models.Model):
 
 
 class RssArticle(models.Model):
-    feed = models.ForeignKey(RssFeed)
+    feed = models.ForeignKey(RssFeed, on_delete=models.CASCADE)
     url = models.URLField(max_length=200, db_index=True, default="")
     snippet = models.CharField(max_length=500, default="", blank=True)
     is_read = models.BooleanField(default=True)

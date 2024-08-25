@@ -23,7 +23,7 @@ class RssFeedResource(DjangoResource):
     )
 
     def is_authenticated(self):
-        return True if self.request.META.get("HTTP_AUTHORIZATION") == "1234" else False
+        return True if self.request.headers.get("authorization") == "1234" else False
 
     """
     @api {get} /api/feeds/ List of feeds
@@ -136,7 +136,7 @@ class RssArticleResource(DjangoResource):
     )
 
     def is_authenticated(self):
-        return True if self.request.META.get("HTTP_AUTHORIZATION") == "1234" else False
+        return True if self.request.headers.get("authorization") == "1234" else False
 
     """
     @api {get} /api/articles/ List of articles

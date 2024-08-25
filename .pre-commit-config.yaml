@@ -17,10 +17,15 @@ repos:
   rev: "v0.15"
   hooks:
     - id: validate-pyproject
--   repo: https://github.com/asottile/pyupgrade
-    rev: v3.17.0
-    hooks:
-    -   id: pyupgrade
+- repo: https://github.com/asottile/pyupgrade
+  rev: v3.17.0
+  hooks:
+  - id: pyupgrade
+- repo: https://github.com/adamchainz/django-upgrade
+  rev: 1.20.0
+  hooks:
+  - id: django-upgrade
+    args: [--target-version, "4.2"]
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version. Keep this in sync with the venv installed version
   rev: v0.6.2

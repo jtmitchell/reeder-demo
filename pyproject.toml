@@ -5,7 +5,7 @@ description = "A simple demonstration of using REST API to save RSS articles"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "django>=5.1",
+    "django~=4.2",
     "psycopg2>=2.9.9",
     "whitenoise>=6.7.0",
     "django-allauth[mfa]>=64.1.0",
@@ -38,6 +38,7 @@ dev-dependencies = [
     "ruff==0.6.2",
     "ruff-lsp>=0.0.55",
     "pyupgrade>=3.17.0",
+    "django-upgrade>=1.20.0",
 ]
 [tool.bandit]
 # Configuration for bandit security checking tool
