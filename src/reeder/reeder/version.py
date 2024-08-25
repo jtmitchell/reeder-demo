@@ -5,4 +5,4 @@ This file should be updated by bump2version.
 
 """
 
-VERSION = "0.0.2"
+VERSION = "0.0.3-rc-0"
