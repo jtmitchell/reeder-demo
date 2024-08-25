@@ -1,0 +1,44 @@
+[project]
+name = "reeder"
+dynamic = ["version"]
+description = "A simple demonstration of using REST API to save RSS articles"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "django>=5.1",
+    "psycopg2>=2.9.9",
+    "whitenoise>=6.7.0",
+    "django-allauth[mfa]>=64.1.0",
+    "django-htmx>=1.19.0",
+    "django-redis>=5.4.0",
+    "django-storages>=1.14.4",
+    "gunicorn>=23.0.0",
+    "dj-database-url>=2.2.0",
+    "restless>=2.2.0",
+    "dj-static>=0.0.6",
+]
+[project.scripts]
+"manage.py" = "reeder:django_manage"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/reeder/reeder/version.py"
+
+[tool.uv]
+dev-dependencies = [
+    "django-debug-toolbar>=4.4.6",
+    "bandit>=1.7.9",
+    "pre-commit>=3.8.0",
+    "bump2version>=1.0.1",
+    "pytest>=8.3.2",
+    "pytest-django>=4.8.0",
+    "ruff==0.6.2",
+    "ruff-lsp>=0.0.55",
+    "pyupgrade>=3.17.0",
+]
+[tool.bandit]
+# Configuration for bandit security checking tool
+exclude_dirs = ["src/test/"]

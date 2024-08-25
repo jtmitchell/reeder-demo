@@ -1,4 +1,4 @@
-reeder-demo
+Reeder RSS Demo
 ===========
 
 Simple django site for a Juju demo
