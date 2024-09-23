@@ -51,6 +51,14 @@ services:
       - 8000
     ports:
       - "5678:5678" # debug port
+    environment:
+      - DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+      - REEDER_DB_NAME=reeder
+      - REEDER_DB_USER=reeder
+      - REEDER_DB_PASSWORD=reeder1234
+      - REEDER_DB_HOST=postgres.localhost
+      - REEDER_DB_PORT=5432
+      - DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
     networks:
       default:
         aliases:

@@ -1,236 +1,106 @@
-from restless.dj import DjangoResource
-from restless.preparers import FieldsPreparer
+from ninja import NinjaAPI, Schema
 
+from .auth import ApiCookieKey, ApiHeaderKey
 from .models import RssArticle, RssFeed
 
+api = NinjaAPI(auth=[ApiHeaderKey(), ApiCookieKey()])
 
-class RssFeedResource(DjangoResource):
-    """
-    @apiDefineSuccessStructure Feed
-    @apiSuccess {Number} id ID for the feed
-    @apiSuccess {Url} url URL for the RSS feed
-    @apiSuccess {String} name Name of the feed
-    @apiSuccess {DateTime} lastmodified Date and time of the last modification to the feed.
-    """
 
-    preparer = FieldsPreparer(
-        fields={
-            "id": "id",
-            "url": "url",
-            "name": "name",
-            "lastmodified": "lastmodified",
-        }
+class FeedSchema(Schema):
+    id: int | None = None
+    name: str = ""
+    url: str = ""
+    lastmodified: str = ""
+
+
+class ArticleSchema(Schema):
+    id: int | None = None
+    feed: str = ""
+    url: str = ""
+    snippet: str = ""
+    is_read: bool = False
+    lastmodified: str = ""
+
+
+@api.get("")
+def feed_list(request) -> list[RssFeed]:
+    return RssFeed.objects.all()
+
+
+@api.get("/{pk}")
+def feed_detail(request, pk: int) -> RssFeed | None:
+    return RssFeed.objects.filter(id=pk).first()
+
+
+@api.post("")
+def feed_create(request, data: FeedSchema) -> RssFeed:
+    return RssFeed.objects.create(
+        url=data["url"],
+        name=data["name"],
     )
 
-    def is_authenticated(self):
-        return True if self.request.headers.get("authorization") == "1234" else False
 
-    """
-    @api {get} /api/feeds/ List of feeds
-    @apiVersion 0.0.2
-    @apiName ListFeeds
-    @apiGroup Feeds
-
-    @apiSuccess {Feed[]} objects List of feeds
-    @apiSuccess {Url} objects.url URL for the RSS feed
-    @apiSuccess {String} objects.name Name of the feed
-    @apiSuccess {Number} objects.id ID for the feed
-    @apiSuccess {DateTime} objects.lastmodified Date and time of the last modification to the feed.
-    """
-
-    def list(self):
-        return RssFeed.objects.all()
-
-    """
-    @api {get} /api/feeds/:id Feed detail
-    @apiVersion 0.0.2
-    @apiName GetFeed
-    @apiGroup Feeds
-
-    @apiParam {Number} id ID for the feed
-
-    @apiSuccessStructure Feed
-    """
-
-    def detail(self, pk):
-        return RssFeed.objects.get(id=pk)
-
-    """
-    @api {post} /api/feeds/ Create new Feed
-    @apiVersion 0.0.2
-    @apiName PostFeed
-    @apiGroup Feeds
-
-    @apiParam {Url} url URL for the RSS feed
-    @apiParam {String} name Name of the feed
-
-    @apiSuccessStructure Feed
-    """
-
-    def create(self):
-        return RssFeed.objects.create(
-            url=self.data["url"],
-            name=self.data["name"],
-        )
-
-    """
-    @api {put} /api/feeds/:id Update an existing Feed
-    @apiVersion 0.0.2
-    @apiName UpdateFeed
-    @apiGroup Feeds
-
-    @apiParam {Number} id ID for the feed
-    @apiParam {Url} url URL for the RSS feed
-    @apiParam {String} name Name of the feed
-
-    @apiSuccessStructure Feed
-    """
-
-    def update(self, pk):
-        try:
-            feed = RssFeed.objects.get(id=pk)
-        except RssFeed.DoesNotExist:
-            feed = RssFeed()
-
-        feed.name = self.data["name"]
-        feed.url = self.data["url"]
+@api.put("/{pk}")
+def feed_update(request, pk: int, data: FeedSchema) -> RssFeed:
+    feed, created = RssFeed.objects.get_or_create(
+        id=pk,
+        defaults=dict(name=data["name"], url=data["url"]),
+    )
+    if not created:
+        feed.name = data["name"]
+        feed.url = data["url"]
         feed.save()
-        return feed
-
-    """
-    @api {delete} /api/feeds/:id Delete an existing Feed
-    @apiVersion 0.0.2
-    @apiName DeleteFeed
-    @apiGroup Feeds
-
-    @apiParam {Number} id ID for the feed
-
-    @apiSuccess (Success 204) empty No data returned
-    """
-
-    def delete(self, pk):
-        RssFeed.objects.get(id=pk).delete()
+    return feed
 
 
-class RssArticleResource(DjangoResource):
-    """
-    @apiDefineSuccessStructure Article
-    @apiSuccess {Number} id ID for the article
-    @apiSuccess {Url} url URL for the article
-    @apiSuccess {String} feed Name of the feed
-    @apiSuccess {String} snippet Short extract or summary of the article
-    @apiSuccess {Boolean} is_read Has the article been marked as read?
-    @apiSuccess {DateTime} lastmodified Date and time of the last modification
+@api.delete("/{pk}")
+def feed_delete(request, pk: int) -> None:
+    RssFeed.objects.filter(id=pk).delete()
 
-    """
 
-    preparer = FieldsPreparer(
-        fields={
-            "id": "id",
-            "url": "url",
-            "feed": "feed.name",
-            "snippet": "snippet",
-            "is_read": "is_read",
-            "lastmodified": "lastmodified",
-        }
+@api.get("/{feed_id}/article")
+def article_list(request, feed_id: int) -> list[RssArticle]:
+    return RssArticle.objects.filter(feed_id=feed_id)
+
+
+@api.get("/{feed_id}/article/{pk}")
+def article_detail(request, feed_id: int, pk: int) -> RssArticle:
+    return RssArticle.objects.filter(feed_id=feed_id, pk=pk).first()
+
+
+@api.post("/{feed_id}/article")
+def article_create(request, feed_id: int, data: ArticleSchema) -> RssArticle | None:
+    feed = RssFeed.objects.filter(pk=feed_id).first()
+    if not feed:
+        return None
+    return RssArticle.objects.create(
+        feed=feed,
+        url=data["url"],
+        snippet=data["snippet"],
+        is_read=data["is_read"],
     )
 
-    def is_authenticated(self):
-        return True if self.request.headers.get("authorization") == "1234" else False
 
-    """
-    @api {get} /api/articles/ List of articles
-    @apiVersion 0.0.2
-    @apiName ListArticles
-    @apiGroup Articles
+@api.put("/{feed_id}/article/{pk}")
+def article_update(request, feed_id: int, pk: int, data: ArticleSchema) -> RssArticle | None:
+    feed = RssFeed.objects.filter(pk=feed_id).first()
+    if not feed:
+        return None
 
-    @apiSuccess {Articles[]} objects List of articles
-    @apiSuccess {Number} objects.id ID for the article
-    @apiSuccess {Url} objects.url URL for the article
-    @apiSuccess {String} objects.feed Name of the feed
-    @apiSuccess {String} objects.snippet Short extract or summary of the article
-    @apiSuccess {Boolean} objects.is_read Has the article been marked as read?
-    @apiSuccess {DateTime} objects.lastmodified Date and time of the last modification
-    """
+    article, created = RssArticle.objects.get_or_create(
+        id=pk,
+        feed=feed,
+        defaults=dict(url=data["url"], snippet=data["snippet"], is_read=data["is_read"]),
+    )
 
-    def list(self):
-        return RssArticle.objects.all()
-
-    """
-    @api {get} /api/articles/:id Article detail
-    @apiVersion 0.0.2
-    @apiName GetArticle
-    @apiGroup Articles
-
-    @apiParam {Number} id ID for the article
-
-    @apiSuccessStructure Article
-    """
-
-    def detail(self, pk):
-        return RssArticle.objects.get(id=pk)
-
-    """
-    @api {post} /api/articles/ Create a new article
-    @apiVersion 0.0.2
-    @apiName PostArticle
-    @apiGroup Articles
-
-    @apiParam {Url} url URL for the article
-    @apiParam {String} feed Name of the feed
-    @apiParam {String} snippet Short extract or summary of the article
-    @apiParam {Boolean} is_read Has the article been marked as read?
-
-    @apiSuccessStructure Article
-    """
-
-    def create(self):
-        return RssArticle.objects.create(
-            url=self.data["url"],
-            feed=RssFeed.objects.get(name=self.data["feed"]),
-            snippet=self.data["snippet"],
-            is_read=self.data["is_read"],
-        )
-
-    """
-    @api {put} /api/articles/:id Update an existing article
-    @apiVersion 0.0.2
-    @apiName UpdateArticle
-    @apiGroup Articles
-
-    @apiParam {Number} id ID for the article
-
-    @apiParam {Url} url URL for the article
-    @apiParam {String} feed Name of the feed
-    @apiParam {String} snippet Short extract or summary of the article
-    @apiParam {Boolean} is_read Has the article been marked as read?
-
-    @apiSuccessStructure Article
-    """
-
-    def update(self, pk):
-        try:
-            article = RssArticle.objects.get(id=pk)
-        except RssArticle.DoesNotExist:
-            article = RssArticle()
-
-        article.url = self.data["url"]
-        article.feed = RssFeed.objects.get(name=self.data["name"])
-        article.snippet = self.data["snippet"]
-        article.is_read = self.data["is_read"]
+    if not created:
+        article.url = data["url"]
+        article.snippet = data["snippet"]
+        article.is_read = data["is_read"]
         article.save()
-        return article
+    return article
 
-    """
-    @api {delete} /api/articles/:id Delete an existing article
-    @apiVersion 0.0.2
-    @apiName DeleteArticle
-    @apiGroup Articles
 
-    @apiParam {Number} id ID for the article
-
-    @apiSuccess (Success 204) empty No data returned
-    """
-
-    def delete(self, pk):
-        RssArticle.objects.get(id=pk).delete()
+@api.delete("/{feed_id}/article/{pk}")
+def article_delete(request, feed_id: int, pk: int) -> None:
+    RssArticle.objects.filter(feed_id=feed_id, id=pk).delete()

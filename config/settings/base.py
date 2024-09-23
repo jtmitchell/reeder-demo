@@ -1,24 +1,21 @@
 # Django settings for reeder project.
 
 import os
-from os.path import abspath, dirname, join
+from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
 
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+APPS_DIR = BASE_DIR / "reeder"
 
-def get_env_variable(var_name):
+
+def get_env_variable(var_name: str, default: str | None = None):
     """Get the environment variable or return exception"""
-    try:
-        return os.environ[var_name]
-    except KeyError:
+    if default is None and var_name not in os.environ:
         error_msg = f"Set the {var_name} environment variable"
         raise ImproperlyConfigured(error_msg)
 
-
-# support for filepath references
-here = lambda *x: join(abspath(dirname(__file__)), *x)
-PROJECT_ROOT = here("..", "..")
-root = lambda *x: join(abspath(PROJECT_ROOT), *x)
+    return os.environ.get(var_name, default=default)
 
 
 DEBUG = False
@@ -33,11 +30,11 @@ MANAGERS = ADMINS
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "reeder",
+        "NAME": get_env_variable("REEDER_DB_NAME", "reeder"),
         "USER": get_env_variable("REEDER_DB_USER"),
         "PASSWORD": get_env_variable("REEDER_DB_PASSWORD"),
-        "HOST": "",
-        "PORT": "",
+        "HOST": get_env_variable("REEDER_DB_HOST", "localhost"),
+        "PORT": get_env_variable("REEDER_DB_PORT", "5432"),
     }
 }
 
@@ -94,7 +91,6 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    # root('static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -116,14 +112,41 @@ STORAGES = {
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    "django.template.loaders.filesystem.Loader",
-    "django.template.loaders.app_directories.Loader",
-    #     'django.template.loaders.eggs.Loader',
-)
+# AUTHENTICATION
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+# https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
+# AUTH_USER_MODEL = "users.User"
+# https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
+LOGIN_REDIRECT_URL = "users:redirect"
+# https://docs.djangoproject.com/en/dev/ref/settings/#login-url
+LOGIN_URL = "account_login"
 
-MIDDLEWARE_CLASSES = (
+# PASSWORDS
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
+PASSWORD_HASHERS = [
+    # https://docs.djangoproject.com/en/dev/topics/auth/passwords/#using-argon2-with-django
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+]
+# https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+]
+
+MIDDLEWARE = (
     "django.middleware.common.CommonMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -132,14 +155,7 @@ MIDDLEWARE_CLASSES = (
     "django.contrib.messages.middleware.MessageMiddleware",
 )
 
-ROOT_URLCONF = "reeder.urls"
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    root("templates"),
-)
+ROOT_URLCONF = "config.urls"
 
 INSTALLED_APPS = (
     "django.contrib.auth",
@@ -148,13 +164,30 @@ INSTALLED_APPS = (
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Uncomment the next line to enable the admin:
     "django.contrib.admin",
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-    "reeder.rssfeeds",
+    "django.forms",
+    "reeder",
 )
 
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [str(APPS_DIR / "templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error.

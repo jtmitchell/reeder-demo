@@ -47,14 +47,21 @@ RUN uv sync --frozen --no-dev --no-install-project
 # ---
 FROM python-base AS builder-base
 
+ARG DJANGO_SETTINGS_MODULE=config.settings.production
+ARG REEDER_DB_USER=
+ARG REEDER_DB_PASSWORD=
+ARG DATABASE_URL=
+ARG DJANGO_SECRET_KEY=
+
 WORKDIR /app
-COPY ./config ./reeder manage.py /app/
+COPY manage.py /app/
+COPY ./docker /app/docker
+COPY ./config /app/config
+COPY ./reeder /app/reeder
 
 # Build static files
 RUN python manage.py collectstatic --no-input
-
-# Compile translation files
-RUN python manage.py compilemessages
+# RUN python manage.py compilemessages
 
 # ---
 # Development container image
@@ -67,7 +74,7 @@ RUN uv sync --frozen --no-install-project
 # Start the development server
 WORKDIR /app
 EXPOSE 8000
-CMD ["docker/dev-entrypoint.sh"]
+CMD ["bash", "docker/entrypoint.sh"]
 
 # ---
 # Production container image
@@ -82,4 +89,4 @@ COPY --from=builder-base --exclude=uv.lock --exclude=pyproject.toml /app /app
 # Start the application server
 WORKDIR /app
 EXPOSE 8000
-CMD ["docker/entrypoint.sh"]
+CMD ["bash", "docker/entrypoint.sh"]
