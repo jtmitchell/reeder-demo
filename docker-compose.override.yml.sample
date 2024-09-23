@@ -1,0 +1,23 @@
+services:
+  mailhog:
+    labels:
+     # These labels enable traefik to route traffic to the container
+      - "traefik.enable=true"
+      - "traefik.http.routers.email.rule=Host(`mailhog.localhost`)"
+      - "traefik.http.routers.email.entrypoints=web"
+      - "traefik.http.services.email.loadbalancer.server.port=8025"
+    entrypoint: ["/bin/sh", "-c", "MailHog &>/dev/null"]
+
+  postgres:
+    ports:
+      - "5432:5432"
+    volumes:
+      - /mnt/data/postgresql/data:/bitnami/postgresql
+
+  reeder:
+    labels:
+      # These labels enable traefik to route traffic to the container
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`reeder.localhost`)"
+      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.http.services.app.loadbalancer.server.port=8000"

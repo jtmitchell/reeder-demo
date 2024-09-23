@@ -1,21 +1,18 @@
-Reeder RSS Demo
-===========
+# Reeder RSS Demo
 
-Simple django site for a Juju demo
-
-*16 July 2014: This code has been adapted into a 12 Factor App style,
-and had a RESTish API added using Restless*
+Simple demo django site.
 
 ## Installation
 
 You will need a Postgresql database to connect to, and have setup login details.
 
+The tooling is using [uv](https://docs.astral.sh/uv/) and [just](https://github.com/casey/just).
+
+1. Install ``uv`` and ``just`` if you don't have them.
 1. Checkout this git repository
-2. `pip install -r requirements/development.txt`
-2. Setup environment variables for
+1. `just install`
+1. Setup environment variables for
 * `REEDER_DB_USER`
 * `REEDER_DB_PASSWORD`
-* `DJANGO_SETTINGS_MODULE=reeder.settings.development`
-
-Optionally you can use `foreman` to start the app, with the supplied Procfile
-and put the enviroment settings into a `.env` file.
+* `DJANGO_SETTINGS_MODULE=config.settings.development`
+* `DJANGO_SECRET_KEY=`<some secret key>

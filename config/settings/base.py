@@ -104,6 +104,14 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = get_env_variable("DJANGO_SECRET_KEY")
@@ -117,6 +125,7 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     "django.middleware.common.CommonMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -143,7 +152,7 @@ INSTALLED_APPS = (
     "django.contrib.admin",
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    "rssfeeds",
+    "reeder.rssfeeds",
 )
 
 # A sample logging configuration. The only tangible logging

@@ -6,28 +6,28 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "django~=4.2",
-    "psycopg2>=2.9.9",
     "whitenoise>=6.7.0",
     "django-allauth[mfa]>=64.1.0",
     "django-htmx>=1.19.0",
     "django-redis>=5.4.0",
     "django-storages>=1.14.4",
-    "gunicorn>=23.0.0",
     "dj-database-url>=2.2.0",
     "restless>=2.2.0",
-    "dj-static>=0.0.6",
+    "granian>=1.6.0",
+    "psycopg2-binary>=2.9.9",
 ]
 [project.scripts]
-"manage.py" = "reeder:django_manage"
+"manage.py" = "reeder.manage:django_manage"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
-path = "src/reeder/reeder/version.py"
+path = "config/version.py"
 
 [tool.uv]
+package = false
 dev-dependencies = [
     "django-debug-toolbar>=4.4.6",
     "bandit>=1.7.9",
@@ -39,6 +39,7 @@ dev-dependencies = [
     "ruff-lsp>=0.0.55",
     "pyupgrade>=3.17.0",
     "django-upgrade>=1.20.0",
+    "debugpy>=1.8.5",
 ]
 [tool.bandit]
 # Configuration for bandit security checking tool
