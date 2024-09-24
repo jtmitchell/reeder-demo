@@ -183,6 +183,7 @@ INSTALLED_APPS = (
     # "allauth.socialaccount.providers.openid_connect",
     # "allauth.socialaccount.providers.saml",
     "reeder",
+    "rssfeeds",
 )
 
 TEMPLATES = [
@@ -228,3 +229,11 @@ LOGGING = {
         },
     },
 }
+
+# Allauth settings
+# https://docs.allauth.org/en/latest/account/configuration.html
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_NOTIFICATIONS = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_PRESERVE_USERNAME_CASING = False

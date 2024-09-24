@@ -6,7 +6,7 @@ class RssFeed(models.Model):
     name = models.CharField(blank=True, default="", max_length=100)
     lastmodified = models.DateTimeField(editable=False, auto_now=True, db_index=True)
 
-    def __unicode__(self):
+    def __str__(self):
         if self.name:
             return f"{self.name}"
         elif self.url:
@@ -22,7 +22,7 @@ class RssArticle(models.Model):
     is_read = models.BooleanField(default=True)
     lastmodified = models.DateTimeField(editable=False, auto_now=True, db_index=True)
 
-    def __unicode__(self):
+    def __str__(self):
         if self.url:
             return f"{self.feed} {self.url} {self.snippet[:10]}"
         else:

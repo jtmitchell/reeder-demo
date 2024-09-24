@@ -1,6 +1,6 @@
 from django.urls import path
 
-from reeder.rssfeeds import views
+from rssfeeds import views
 
 from .api import api
 

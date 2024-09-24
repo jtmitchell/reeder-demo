@@ -1,7 +1,6 @@
-import json
 import logging
 
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 
 from .models import RssArticle, RssFeed
@@ -32,7 +31,7 @@ def put(request, feed_id, article_url):
         status["success"] = False
         status["error"] = e
 
-    return HttpResponse(json.dumps(status), mimetype="application/json")
+    return JsonResponse(data=status)
 
 
 def get(request, feed_id):
@@ -51,11 +50,11 @@ def get(request, feed_id):
                 }
             )
 
-    return HttpResponse(json.dumps(return_value), mimetype="application/json")
+    return JsonResponse(data=return_value, safe=False)
 
 
 def delete(request, feed_id):
     status = {"success": False}
     if RssFeed.objects.get(pk=feed_id).delete():
         status["success"] = True
-    return HttpResponse(json.dumps(status), mimetype="application/json")
+    return JsonResponse(data=status)

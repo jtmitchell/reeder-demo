@@ -54,10 +54,11 @@ ARG DATABASE_URL=
 ARG DJANGO_SECRET_KEY=
 
 WORKDIR /app
-COPY manage.py /app/
+COPY manage.py /app/manage.py
 COPY ./docker /app/docker
 COPY ./config /app/config
 COPY ./reeder /app/reeder
+COPY ./rssfeeds /app/rssfeeds
 
 # Build static files
 RUN python manage.py collectstatic --no-input
