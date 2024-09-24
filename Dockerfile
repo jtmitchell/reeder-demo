@@ -74,7 +74,7 @@ RUN uv sync --frozen --no-install-project
 # Start the development server
 WORKDIR /app
 EXPOSE 8000
-CMD ["bash", "docker/entrypoint.sh"]
+CMD ["bash", "docker/dev-entrypoint.sh"]
 
 # ---
 # Production container image

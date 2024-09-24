@@ -27,6 +27,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -147,12 +149,17 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 MIDDLEWARE = (
-    "django.middleware.common.CommonMiddleware",
+    "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
+    # django-allauth https://docs.allauth.org/en/latest/installation/
+    "allauth.account.middleware.AccountMiddleware",
 )
 
 ROOT_URLCONF = "config.urls"
@@ -166,6 +173,15 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
     "django.contrib.admin",
     "django.forms",
+    # django-allauth https://docs.allauth.org/en/latest/installation/
+    "allauth",
+    "allauth.account",
+    "allauth.mfa",
+    "allauth.socialaccount",
+    # "allauth.socialaccount.providers.microsoft",
+    # "allauth.socialaccount.providers.oauth2",
+    # "allauth.socialaccount.providers.openid_connect",
+    # "allauth.socialaccount.providers.saml",
     "reeder",
 )
 

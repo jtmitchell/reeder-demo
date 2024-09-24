@@ -6,7 +6,7 @@ echo "Migrate database..."
 python manage.py migrate
 
 echo "Start granian..."
-granian reeder.wsgi:application \
+granian config.wsgi:application \
     --host 0.0.0.0 \
     --port 8000 \
     --interface wsgi \

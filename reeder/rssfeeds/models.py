@@ -4,9 +4,7 @@ from django.db import models
 class RssFeed(models.Model):
     url = models.URLField(unique=True, db_index=True, default="")
     name = models.CharField(blank=True, default="", max_length=100)
-    lastmodified = models.DateTimeField(
-        editable=False, auto_now=True, auto_now_add=True, db_index=True
-    )
+    lastmodified = models.DateTimeField(editable=False, auto_now=True, db_index=True)
 
     def __unicode__(self):
         if self.name:
@@ -22,9 +20,7 @@ class RssArticle(models.Model):
     url = models.URLField(max_length=200, db_index=True, default="")
     snippet = models.CharField(max_length=500, default="", blank=True)
     is_read = models.BooleanField(default=True)
-    lastmodified = models.DateTimeField(
-        editable=False, auto_now=True, auto_now_add=True, db_index=True
-    )
+    lastmodified = models.DateTimeField(editable=False, auto_now=True, db_index=True)
 
     def __unicode__(self):
         if self.url:
